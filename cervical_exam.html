@@ -1,0 +1,112 @@
+<div id="cxw" style="font-family:system-ui,sans-serif;font-size:13px;max-width:660px;margin:0 auto;background:#f8fafc;padding:10px;border-radius:10px;">
+<div style="background:#1e3a5f;color:#fff;padding:9px 14px;border-radius:8px 8px 0 0;margin-bottom:10px;"><div style="font-size:15px;font-weight:700;">Cervical Spine — Neurological Exam</div><div style="font-size:11px;opacity:.7;margin-top:2px;">Complete all sections then Submit.</div></div>
+<div id="cxr"></div></div>
+<script>
+var X={};
+var DR=[{i:'c4',l:'C4',s:'shoulder cap'},{i:'c5',l:'C5',s:'lat arm'},{i:'c6',l:'C6',s:'thumb'},{i:'c7',l:'C7',s:'mid finger'},{i:'c8',l:'C8',s:'ring/small'},{i:'t1',l:'T1',s:'med arm'}];
+var MY=[{i:'delt',l:'Shoulder abd',s:'C5'},{i:'bic',l:'Elbow flex',s:'C5/C6'},{i:'wext',l:'Wrist ext',s:'C6'},{i:'tric',l:'Elbow ext',s:'C7'},{i:'wfl',l:'Wrist flex',s:'C7'},{i:'fex',l:'Finger ext',s:'C7'},{i:'ffl',l:'Finger flex',s:'C8'},{i:'int',l:'Hand intrinsics',s:'T1'}];
+var SQ=['Dim','Abs','Hyp'],SF={Dim:'Diminished',Abs:'Absent',Hyp:'Hyperesthesia'};
+var SG=['4/5','3/5','2/5','1/5','0/5'];
+var SC={Dim:'background:#fef3c7;color:#92400e;border-color:#f59e0b;',Abs:'background:#fee2e2;color:#991b1b;border-color:#dc2626;',Hyp:'background:#ede9fe;color:#5b21b6;border-color:#7c3aed;','4/5':'background:#fef3c7;color:#92400e;border-color:#f59e0b;','3/5':'background:#fed7aa;color:#9a3412;border-color:#f97316;','2/5':'background:#fee2e2;color:#991b1b;border-color:#ef4444;','1/5':'background:#fce7f3;color:#9d174d;border-color:#ec4899;','0/5':'background:#f3e8ff;color:#6b21a8;border-color:#a855f7;'};
+var BY='border:1px solid #16a34a;background:#dcfce7;color:#15803d;font-weight:700;';
+var BN='border:1px solid #dc2626;background:#fee2e2;color:#dc2626;font-weight:700;';
+var BB='border:1px solid #cbd5e1;background:#f1f5f9;color:#475569;';
+function g(k){return X[k]||'';}
+function sv(k,v){X[k]=v;R();}
+function tg(k,v){X[k]=X[k]===v?'':v;R();}
+function sc(id,sd){var k='sn-'+id+'-'+sd,p=g('sp')||'Dim';X[k]=X[k]===p?'':p;R();}
+function mc(id,sd){var k='st-'+id+'-'+sd,p=g('mp')||'4/5';X[k]=X[k]===p?'':p;R();}
+function btn(lbl,clk,st){return '<button onclick="'+clk+'" style="cursor:pointer;border-radius:5px;font-size:11px;padding:3px 10px;font-family:inherit;'+st+'">'+lbl+'</button>';}
+function card(t,b){return '<div style="border:1px solid #e2e8f0;border-radius:8px;margin-bottom:10px;overflow:hidden;"><div style="background:#f1f5f9;padding:8px 13px;font-size:12px;font-weight:700;color:#1e3a5f;border-bottom:1px solid #e2e8f0;">'+t+'</div><div style="padding:11px 13px;background:#fff;">'+b+'</div></div>';}
+function secB(k){var v=g('s'+k);return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:12px;color:#64748b;min-width:68px;">Overall:</span>'+btn('Normal',"sv('s"+k+"','n')",v==='n'?BY:BB)+btn('Abnormal',"sv('s"+k+"','a')",v==='a'?BN:BB)+'</div>';}
+function TA(id,ph){return '<textarea rows="2" placeholder="'+ph+'" style="width:100%;box-sizing:border-box;padding:6px 9px;border-radius:6px;border:1px solid #e2e8f0;font-size:12px;font-family:inherit;resize:vertical;margin-top:7px;" oninput="X[\'ta'+id+'\']=this.value">'+(X['ta'+id]||'')+'</textarea>';}
+function mkGrid(items,pfx,picker,cellFn){
+  var pk=g(picker)||items[0];
+  var bar='<div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-wrap:wrap;"><span style="font-size:11px;color:#64748b;">Stamp:</span>'+items.map(function(v){var on=SC[v]?SC[v]+'font-weight:700;border-radius:5px;font-size:11px;padding:3px 10px;cursor:pointer;font-family:inherit;':BY;return btn(v,"sv('"+picker+"','"+v+"')",pk===v?on:BB);}).join('')+'<span style="font-size:10px;color:#d1d5db;margin-left:3px;">tap cell · again to clear</span></div>';
+  var rows=pfx.map(function(m){
+    var l=g(cellFn+m.i+'-L'),r=g(cellFn+m.i+'-R');
+    var lc=l?SC[l]+'font-weight:700;':'background:#f3f4f6;color:#d1d5db;';
+    var rc=r?SC[r]+'font-weight:700;':'background:#f3f4f6;color:#d1d5db;';
+    return '<tr><td style="padding:2px 5px;"><div style="font-size:12px;font-weight:500;">'+m.l+'</div><div style="font-size:10px;color:#94a3b8;">'+m.s+'</div></td>'
+      +'<td style="padding:2px;"><button onclick="'+picker.charAt(0)+'c(\''+m.i+'\',\'L\')" style="width:100%;padding:5px 2px;border-radius:5px;cursor:pointer;font-size:12px;border:1px solid #e5e7eb;'+lc+'">'+(l||'—')+'</button></td>'
+      +'<td style="padding:2px;"><button onclick="'+picker.charAt(0)+'c(\''+m.i+'\',\'R\')" style="width:100%;padding:5px 2px;border-radius:5px;cursor:pointer;font-size:12px;border:1px solid #e5e7eb;'+rc+'">'+(r||'—')+'</button></td></tr>';
+  }).join('');
+  return bar+'<div style="overflow-x:auto;"><table style="border-collapse:separate;border-spacing:3px;width:100%;"><tr><th></th><th style="font-size:11px;color:#64748b;font-weight:600;text-align:center;min-width:65px;">Left</th><th style="font-size:11px;color:#64748b;font-weight:600;text-align:center;min-width:65px;">Right</th></tr>'+rows+'</table></div>';
+}
+function senSec(){var v=g('ssen');return secB('sen')+(v==='a'?mkGrid(SQ,DR,'sp','sn-')+TA('sen','e.g. burning dysesthesia C6 left…'):'');}
+function strSec(){var v=g('sstr');return secB('str')+(v==='a'?mkGrid(SG,MY,'mp','st-')+TA('str','e.g. give-way weakness left C6…'):'');}
+function brow(lbl,sub,k){
+  var l=g(k+'-L'),r=g(k+'-R');
+  return '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border:1px solid #f0f0f0;border-radius:7px;margin-bottom:6px;background:#fff;">'
+    +'<div style="flex:1;min-width:120px;font-size:13px;font-weight:500;">'+lbl+(sub?'<span style="font-size:10px;color:#94a3b8;margin-left:5px;">'+sub+'</span>':'')+'</div>'
+    +'<span style="font-size:11px;color:#94a3b8;">L:</span>'+btn('Pos',"tg('"+k+"-L','pos')",l==='pos'?BN:BB)+btn('Neg',"tg('"+k+"-L','neg')",l==='neg'?BY:BB)
+    +'<span style="font-size:11px;color:#94a3b8;margin-left:4px;">R:</span>'+btn('Pos',"tg('"+k+"-R','pos')",r==='pos'?BN:BB)+btn('Neg',"tg('"+k+"-R','neg')",r==='neg'?BY:BB)+'</div>';
+}
+function rrow(lbl,lvl,k){
+  var nm=g(k+'-nm'),l=g(k+'-L'),r=g(k+'-R');
+  var det=nm==='a'?'<div style="display:flex;align-items:center;gap:5px;margin-top:6px;flex-wrap:wrap;"><span style="font-size:11px;color:#94a3b8;">L:</span>'
+    +['Dim','Abs','HH'].map(function(f){return btn(f==='HH'?'Hyp':f,"tg('"+k+"-L','"+f+"')",l===f?BN:BB);}).join('')
+    +'<span style="font-size:11px;color:#94a3b8;margin-left:4px;">R:</span>'
+    +['Dim','Abs','HH'].map(function(f){return btn(f==='HH'?'Hyp':f,"tg('"+k+"-R','"+f+"')",r===f?BN:BB);}).join('')+'</div>':'';
+  return '<div style="border:1px solid #f0f0f0;border-radius:7px;padding:8px 10px;margin-bottom:6px;background:#fff;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="flex:1;font-size:13px;font-weight:500;">'+lbl+' <span style="font-size:10px;color:#94a3b8;">'+lvl+'</span></div>'
+    +btn('Normal bilat',"tg('"+k+"-nm','n')",nm==='n'?BY:BB)+btn('Abnormal',"tg('"+k+"-nm','a')",nm==='a'?BN:BB)+'</div>'+det+'</div>';
+}
+function refSec(){
+  var v=g('sref');
+  if(v!=='a') return secB('ref');
+  var inv=g('bri'),gt=g('gt');
+  var gOpts=['Normal','Antalgic','Wide-based','Tandem abnormal','Not assessed'];
+  return secB('ref')
+    +rrow('Triceps','C7','trc')+rrow('Brachioradialis','C6','br')
+    +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border:1px solid #f0f0f0;border-radius:7px;margin-bottom:6px;background:#fff;"><span style="font-size:13px;font-weight:500;flex:1;min-width:130px;">Inverted radial reflex</span>'
+    +['Left','Right','Bilateral'].map(function(v){return btn(v,"tg('bri','"+v+"')",inv===v?BN:BB);}).join('')+'</div>'
+    +'<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:8px 0 5px;">Special Tests</div>'
+    +brow("Hoffman's",'','hof')+brow("Spurling's",'axial compression','spu')
+    +'<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:8px 0 5px;">Myelopathy Signs</div>'
+    +brow('Clonus','lower extremity','clo')+brow('Babinski','plantar response','bab')
+    +'<div style="padding:7px 10px;border:1px solid #f0f0f0;border-radius:7px;margin-bottom:6px;background:#fff;"><div style="font-size:13px;font-weight:500;margin-bottom:6px;">Gait</div><div style="display:flex;gap:5px;flex-wrap:wrap;">'
+    +gOpts.map(function(o){return btn(o,"tg('gt','"+o+"')",gt===o?BY:BB);}).join('')+'</div></div>'
+    +TA('ref',"e.g. Lhermitte's positive, finger escape sign…");
+}
+function R(){
+  document.getElementById('cxr').innerHTML=
+    card('Sensation (C4–T1)',senSec())
+    +card('Strength (C5–T1)',strSec())
+    +card('Reflexes, Special Tests &amp; Myelopathy Signs',refSec())
+    +'<button onclick="SUB()" style="width:100%;padding:10px;border-radius:8px;border:none;background:#1e3a5f;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:2px;">Submit Exam →</button>';
+}
+function SUB(){
+  var L=[],RF={Dim:'diminished',Abs:'absent',HH:'hyperreflexic'};
+  var sn=g('ssen'),ss=g('sstr'),sr=g('sref');
+  if(sn==='n'){L.push('Sensation: Intact throughout bilateral upper extremities.');}
+  else if(sn==='a'){
+    var a=[];DR.forEach(function(lv){var l=g('sn-'+lv.i+'-L'),r=g('sn-'+lv.i+'-R');if(!l&&!r)return;if(l&&r&&l===r)a.push(lv.l+' ('+lv.s+'): '+SF[l]+' bilaterally');else{if(l)a.push(lv.l+' ('+lv.s+'): '+SF[l]+' left');if(r)a.push(lv.l+' ('+lv.s+'): '+SF[r]+' right');}});
+    L.push('Sensation: '+(a.length?a.join('; ')+'. Remainder intact.':'Abnormal — see comments.'));
+    if(X.tasen&&X.tasen.trim())L.push('  '+X.tasen.trim());
+  }
+  if(ss==='n'){L.push('Strength: 5/5 throughout bilateral upper extremities.');}
+  else if(ss==='a'){
+    var b=[];MY.forEach(function(m){var l=g('st-'+m.i+'-L'),r=g('st-'+m.i+'-R');if(!l&&!r)return;if(l&&r&&l===r)b.push(m.l+' ('+m.s+'): '+l+' bilaterally');else{if(l)b.push(m.l+' ('+m.s+'): '+l+' left');if(r)b.push(m.l+' ('+m.s+'): '+r+' right');}});
+    L.push('Strength: '+(b.length?b.join('; ')+'. Remainder 5/5.':'Abnormal — see comments.'));
+    if(X.tastr&&X.tastr.trim())L.push('  '+X.tastr.trim());
+  }
+  function RL(k,lb,lv){var nm=g(k+'-nm'),l=g(k+'-L'),r=g(k+'-R');if(nm==='n')return lb+' ('+lv+'): normal bilaterally';if(!l&&!r)return lb+' ('+lv+'): abnormal';if(l&&r&&l===r)return lb+' ('+lv+'): '+(RF[l]||l)+' bilaterally';var p=[];if(l)p.push((RF[l]||l)+' left');if(r)p.push((RF[r]||r)+' right');return lb+' ('+lv+'): '+p.join(', ');}
+  function BL(k,lb){var l=g(k+'-L'),r=g(k+'-R'),p=[];if(l==='pos')p.push('left');if(r==='pos')p.push('right');if(l==='neg'&&r==='neg')return lb+': Negative bilaterally.';if(p.length)return lb+': Positive on the '+p.join(' and ')+'.';return lb+': Not documented.';}
+  if(sr==='n'){L.push('Reflexes: Triceps (C7) and brachioradialis (C6) symmetric and intact bilaterally.');L.push("Hoffman's: Negative bilaterally. Spurling's: Negative bilaterally.");L.push('Clonus: Absent. Babinski: Negative bilaterally. Gait: Normal.');}
+  else if(sr==='a'){
+    L.push('Reflexes: '+RL('trc','Triceps','C7')+'; '+RL('br','Brachioradialis','C6')+'.');
+    var inv=g('bri');if(inv)L.push('Inverted radial reflex: Present '+(inv==='Bilateral'?'bilaterally':'on the '+inv.toLowerCase()+' side')+'.');
+    L.push(BL('hof',"Hoffman's"));L.push(BL('spu',"Spurling's"));
+    var cL=g('clo-L'),cR=g('clo-R'),cp=[];if(cL==='pos')cp.push('left');if(cR==='pos')cp.push('right');
+    if(cL==='neg'&&cR==='neg')L.push('Clonus: Absent bilaterally.');else if(cp.length)L.push('Clonus: Present on the '+cp.join(' and ')+' side.');else L.push('Clonus: Not assessed.');
+    var bL=g('bab-L'),bR=g('bab-R'),bp=[];if(bL==='pos')bp.push('left');if(bR==='pos')bp.push('right');
+    if(bL==='neg'&&bR==='neg')L.push('Babinski: Negative bilaterally.');else if(bp.length)L.push('Babinski: Extensor plantar response on the '+bp.join(' and ')+' side.');else L.push('Babinski: Not assessed.');
+    var gt=g('gt');if(gt)L.push('Gait: '+gt+'.');
+    if(X.taref&&X.taref.trim())L.push(X.taref.trim());
+  }
+  var note=L.join('\n');
+  if(typeof sendPrompt==='function')sendPrompt('CERVICAL EXAM SUBMITTED:\n'+note);
+  document.getElementById('cxw').innerHTML='<div style="padding:20px;text-align:center;color:#16a34a;font-weight:700;font-size:14px;">✓ Submitted.<br><br><pre style="text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:system-ui,sans-serif;color:#111;">'+note+'</pre></div>';
+}
+R();
+</script>
