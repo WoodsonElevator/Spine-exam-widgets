@@ -1,0 +1,99 @@
+<div id="sxw" style="font-family:system-ui,sans-serif;font-size:13px;max-width:660px;margin:0 auto;background:#f8fafc;padding:10px;border-radius:10px;">
+<div style="background:#4c1d95;color:#fff;padding:9px 14px;border-radius:8px 8px 0 0;margin-bottom:10px;"><div style="font-size:15px;font-weight:700;">SI Joint — Provocative Exam</div><div style="font-size:11px;opacity:.7;margin-top:2px;">Complete lumbar neuro summary then document cluster tests.</div></div>
+<div id="sxr"></div></div>
+<script>
+var X={};
+var TESTS=[
+  {i:'fab',l:"FABER / Patrick's",s:'Flexion, abduction, external rotation'},
+  {i:'fad',l:'FADIR',s:'Flexion, adduction, internal rotation'},
+  {i:'gae',l:"Gaenslen's",s:'Hip extension + contralateral flexion'},
+  {i:'thi',l:'Posterior shear / thigh thrust',s:'Axial load through femur'},
+  {i:'cmp',l:'Compression test',s:'Lateral pelvic compression'},
+  {i:'dst',l:'Distraction test',s:'Lateral iliac crest separation'},
+  {i:'sac',l:'Sacral sulcus tenderness',s:'Direct palpation PSIS'},
+  {i:'for',l:'Fortin finger sign',s:'Patient localizes to PSIS'}
+];
+var BY='border:1px solid #16a34a;background:#dcfce7;color:#15803d;font-weight:700;';
+var BN='border:1px solid #dc2626;background:#fee2e2;color:#dc2626;font-weight:700;';
+var BB='border:1px solid #cbd5e1;background:#f1f5f9;color:#475569;';
+var BG='border:1px solid #9ca3af;background:#f3f4f6;color:#6b7280;font-weight:600;';
+var BS='border:1px solid #2563eb;background:#dbeafe;color:#1d4ed8;font-weight:700;';
+function g(k){return X[k]||'';}
+function sv(k,v){X[k]=v;R();}
+function tg(k,v){X[k]=X[k]===v?'':v;R();}
+function tt(id,val){
+  var cur=g('si-'+id);X['si-'+id]=cur===val?'':val;
+  if(val==='pos'&&cur!=='pos'&&!g('si-'+id+'-sd')&&g('cs'))X['si-'+id+'-sd']=g('cs');
+  R();
+}
+function ts(id,val){X['si-'+id+'-sd']=X['si-'+id+'-sd']===val?'':val;R();}
+function btn(lbl,clk,st){return '<button onclick="'+clk+'" style="cursor:pointer;border-radius:5px;font-size:11px;padding:3px 10px;font-family:inherit;'+st+'">'+lbl+'</button>';}
+function card(t,b){return '<div style="border:1px solid #e2e8f0;border-radius:8px;margin-bottom:10px;overflow:hidden;"><div style="background:#f5f3ff;padding:8px 13px;font-size:12px;font-weight:700;color:#4c1d95;border-bottom:1px solid #e2e8f0;">'+t+'</div><div style="padding:11px 13px;background:#fff;">'+b+'</div></div>';}
+function TA(id,ph){return '<textarea rows="2" placeholder="'+ph+'" style="width:100%;box-sizing:border-box;padding:6px 9px;border-radius:6px;border:1px solid #e2e8f0;font-size:12px;font-family:inherit;resize:vertical;margin-top:7px;" oninput="X[\'ta'+id+'\']=this.value">'+(X['ta'+id]||'')+'</textarea>';}
+function neuroSec(){
+  var nm=g('nm');
+  return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">'
+    +'<span style="font-size:12px;color:#64748b;min-width:140px;">Lumbar neuro exam:</span>'
+    +btn('Intact / Normal',"sv('nm','n')",nm==='n'?BY:BB)+btn('Abnormal',"sv('nm','a')",nm==='a'?BN:BB)+'</div>'
+    +(nm==='a'?TA('neuro','Describe abnormalities (e.g. L5 weakness left, diminished Achilles right)…'):'');
+}
+function badge(){
+  var pc=TESTS.filter(function(t){return g('si-'+t.i)==='pos';}).length;
+  var perf=TESTS.filter(function(t){var v=g('si-'+t.i);return v&&v!=='np';}).length;
+  if(!pc)return '<div style="font-size:12px;color:#94a3b8;margin-bottom:10px;">≥3 / 8 positive cluster tests increases diagnostic likelihood of SI joint pain (Laslett et al.)</div>';
+  var col=pc>=3?{bg:'#dcfce7',br:'#16a34a',tx:'#15803d'}:{bg:'#fef3c7',br:'#f59e0b',tx:'#92400e'};
+  return '<div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;padding:7px 13px;border-radius:8px;background:'+col.bg+';border:1px solid '+col.br+';">'
+    +'<strong style="color:'+col.tx+';">'+pc+' / '+perf+' positive</strong>'
+    +'<span style="font-size:11px;color:'+col.tx+';">'+(pc>=3?'✓ threshold met for SI joint pain diagnosis':'≥3 increases diagnostic likelihood')+'</span></div>';
+}
+function testRows(){
+  var cs=g('cs');
+  return TESTS.map(function(t){
+    var res=g('si-'+t.i),sd=g('si-'+t.i+'-sd')||cs;
+    var isP=res==='pos',isN=res==='neg',isNP=res==='np';
+    var bg=isP?'#fff7f7':isNP?'#f9fafb':'#fafafa';
+    var br=isP?'#fecaca':isNP?'#e5e7eb':'#f0f0f0';
+    var sideRow=isP?'<div style="display:flex;align-items:center;gap:5px;margin-top:7px;flex-wrap:wrap;"><span style="font-size:11px;color:#64748b;">Side:</span>'
+      +['left','right','bilateral'].map(function(v){return btn(v.charAt(0).toUpperCase()+v.slice(1),"ts('"+t.i+"','"+v+"')",sd===v?BS:BB);}).join('')+'</div>':'';
+    return '<div style="border:1px solid '+br+';border-radius:8px;padding:9px 12px;margin-bottom:6px;background:'+bg+';">'
+      +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+      +'<div style="flex:1;min-width:140px;"><div style="font-size:13px;font-weight:500;'+(isNP?'color:#9ca3af;':'')+'">'+t.l+'</div><div style="font-size:10px;color:#94a3b8;">'+t.s+'</div></div>'
+      +btn('Positive',"tt('"+t.i+"','pos')",isP?BN:BB)+btn('Negative',"tt('"+t.i+"','neg')",isN?BY:BB)+btn('Not done',"tt('"+t.i+"','np')",isNP?BG:BB)
+      +'</div>'+sideRow+'</div>';
+  }).join('');
+}
+function R(){
+  var cs=g('cs');
+  var sideBar='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="font-size:12px;color:#64748b;">Primary complaint side:</span>'
+    +btn('Left',"sv('cs','left')",cs==='left'?BN:BB)+btn('Right',"sv('cs','right')",cs==='right'?BN:BB)+btn('Bilateral',"sv('cs','bilateral')",cs==='bilateral'?BY:BB)+'</div>'
+    +(cs?'<div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">Positive tests auto-fill to '+cs+' — override per test as needed.</div>':'');
+  document.getElementById('sxr').innerHTML=
+    card('Lumbar Neurological Summary',neuroSec())
+    +card('SI Provocative Cluster Tests',sideBar+badge()+testRows()+TA('si','e.g. bilateral findings, tenderness at PSIS…'))
+    +'<button onclick="SUB()" style="width:100%;padding:10px;border-radius:8px;border:none;background:#4c1d95;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:2px;">Submit Exam →</button>';
+}
+function SUB(){
+  var L=[],nm=g('nm');
+  if(nm==='n')L.push('Lumbar neurological exam: Intact — no focal motor, sensory, or reflex deficits identified.');
+  else if(nm==='a'){var nt=X.taneuro;L.push('Lumbar neurological exam: Abnormal — '+(nt&&nt.trim()?nt.trim():'see clinical record')+'.');}
+  else L.push('Lumbar neurological exam: Not documented.');
+  var pos=[],neg=[],np=[];
+  TESTS.forEach(function(t){var r=g('si-'+t.i),sd=g('si-'+t.i+'-sd')||g('cs');if(r==='pos')pos.push({l:t.l,sd:sd});else if(r==='neg')neg.push(t.l);else if(r==='np')np.push(t.l);});
+  var pc=pos.length,perf=pc+neg.length;
+  if(pc){
+    L.push('SI provocative cluster: '+pos.map(function(p){return p.l+(p.sd?' ('+p.sd+')':'');}).join('; ')+'— positive.');
+    if(neg.length)L.push('Negative: '+neg.join(', ')+'.');
+    if(np.length)L.push('Not performed: '+np.join(', ')+'.');
+    L.push(pc+' / '+perf+' performed tests positive'+(pc>=3?', meeting threshold for SI joint pain diagnosis (Laslett criteria).':'.'));
+  } else if(perf){
+    L.push('SI provocative cluster: All performed tests negative ('+perf+' tests performed).');
+    if(np.length)L.push('Not performed: '+np.join(', ')+'.');
+  } else {L.push('SI provocative cluster: Not documented.');}
+  var ta=X.tasi;if(ta&&ta.trim())L.push('Additional: '+ta.trim());
+  var note=L.join('\n');
+  window.parent.postMessage({type:'exam-submit',exam:'si',note:note},'*');
+  if(typeof sendPrompt==='function')sendPrompt('SI EXAM SUBMITTED:\n'+note);
+  document.getElementById('sxw').innerHTML='<div style="padding:20px;text-align:center;color:#16a34a;font-weight:700;font-size:14px;">✓ Submitted.<br><br><pre style="text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:system-ui,sans-serif;color:#111;">'+note+'</pre></div>';
+}
+R();
+</script>
